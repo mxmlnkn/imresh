@@ -35,41 +35,41 @@ namespace hal
      *
      * This can be handy while distributing work over the used GPUs.
      */
-    class DeviceIterator :
-        public std::iterator<std::forward_iterator_tag, GPU>
+    class StreamIterator :
+        public std::iterator<std::forward_iterator_tag, cudaStream_t>
     {
     public:
-        DeviceIterator( GPU* _item ) :
+        StreamIterator( cudaStream_t* _item ) :
             item( _item )
         { }
 
-        DeviceIterator( const DeviceIterator& _iter ) :
+        StreamIterator( const StreamIterator& _iter ) :
             item( _iter.item )
         { }
 
-        DeviceIterator& operator++( )
+        StreamIterator& operator++( )
         {
             ++item;
             return *this;
         }
 
-        bool operator==( const DeviceIterator& rhs )
+        bool operator==( const StreamIterator& rhs )
         {
             return item == rhs.item;
         }
 
-        bool operator!=( const DeviceIterator& rhs )
+        bool operator!=( const StreamIterator& rhs )
         {
             return item != rhs.item;
         }
 
-        GPU& operator*( )
+        cudaStream_t& operator*( )
         {
             return *item;
         }
 
     private:
-        GPU* item;
+        cudaStream_t* item;
     };
 } // namespace hal
 } // namespace imresh
