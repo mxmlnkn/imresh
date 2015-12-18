@@ -54,14 +54,14 @@ namespace hal
             return *this;
         }
 
-        bool operator==( const StreamIterator& _rhs )
+        bool operator==( const StreamIterator& rhs )
         {
-            return item == _rhs.item;
+            return item == rhs.item;
         }
 
-        bool operator!=( const StreamIterator& _rhs )
+        bool operator!=( const StreamIterator& rhs )
         {
-            return item != _rhs.item;
+            return item != rhs.item;
         }
 
         cudaStream_t& operator*( )

@@ -28,6 +28,7 @@
 
 #include "hal/gpu.hpp"
 
+
 namespace imresh
 {
 namespace hal
@@ -55,14 +56,14 @@ namespace hal
             return *this;
         }
 
-        bool operator==( const DeviceIterator& _rhs )
+        bool operator==( const DeviceIterator& rhs )
         {
-            return item == _rhs.item;
+            return item == rhs.item;
         }
 
-        bool operator!=( const DeviceIterator& _rhs )
+        bool operator!=( const DeviceIterator& rhs )
         {
-            return item != _rhs.item;
+            return item != rhs.item;
         }
 
         GPU& operator*( )
