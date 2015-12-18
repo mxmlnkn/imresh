@@ -28,6 +28,7 @@
 
 #include "hal/gpu.hpp"
 
+
 namespace imresh
 {
 namespace hal
