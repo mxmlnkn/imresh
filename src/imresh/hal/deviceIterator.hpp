@@ -26,6 +26,8 @@
 
 #include <iterator>         // std::iterator, std::forward_iterator_tag
 
+#include "hal/gpu.hpp"
+
 namespace imresh
 {
 namespace hal
@@ -53,14 +55,14 @@ namespace hal
             return *this;
         }
 
-        bool operator==( const DeviceIterator& rhs )
+        bool operator==( const DeviceIterator& _rhs )
         {
-            return item == rhs.item;
+            return item == _rhs.item;
         }
 
-        bool operator!=( const DeviceIterator& rhs )
+        bool operator!=( const DeviceIterator& _rhs )
         {
-            return item != rhs.item;
+            return item != _rhs.item;
         }
 
         GPU& operator*( )

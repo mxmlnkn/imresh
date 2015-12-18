@@ -22,55 +22,32 @@
  * SOFTWARE.
  */
 
-#pragma once
+#include "hal/deviceIterator.hpp"
+#include "hal/hal.hpp"
+#include "hal/streamIterator.hpp"
 
-#include <cuda_runtime.h>   // cudaStream_t
-#include <iterator>         // std::iterator, std::forward_iterator_tag
 
 namespace imresh
 {
 namespace hal
 {
-    /**
-     * Convenient wrapper to iterate over all available devices.
-     *
-     * This can be handy while distributing work over the used GPUs.
-     */
-    class StreamIterator :
-        public std::iterator<std::forward_iterator_tag, cudaStream_t>
+    HAL::HAL( )
     {
-    public:
-        StreamIterator( cudaStream_t* _item ) :
-            item( _item )
-        { }
 
-        StreamIterator( const StreamIterator& _iter ) :
-            item( _iter.item )
-        { }
+    }
 
-        StreamIterator& operator++( )
-        {
-            ++item;
-            return *this;
-        }
+    const
+    DeviceIterator&
+    HAL::getDeviceIterator( ) const
+    {
+        return this->deviceIterator;
+    }
 
-        bool operator==( const StreamIterator& _rhs )
-        {
-            return item == _rhs.item;
-        }
-
-        bool operator!=( const StreamIterator& _rhs )
-        {
-            return item != _rhs.item;
-        }
-
-        cudaStream_t& operator*( )
-        {
-            return *item;
-        }
-
-    private:
-        cudaStream_t* item;
-    };
+    const
+    StreamIterator&
+    HAL::getStreamIterator( ) const
+    {
+        return this->streamIterator;
+    }
 } // namespace hal
 } // namespace imresh
