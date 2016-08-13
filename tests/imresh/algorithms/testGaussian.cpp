@@ -36,6 +36,7 @@
 #include <cmath>
 #include <cfloat>    // FLT_MAX, FLT_EPSILON
 #include <cuda_to_cupla.hpp>
+
 #include "algorithms/vectorReduce.hpp"
 #include "algorithms/cuda/cudaGaussian.hpp"
 //#include "benchmark/imresh/algorithms/cuda/cudaGaussian.hpp"
@@ -79,7 +80,14 @@ namespace algorithms
     }
 
     void TestGaussian::compareFloatArray
-    ( float * rpData, float * rpResult, unsigned nCols, unsigned nRows, float sigma, unsigned line )
+    (
+        float *      const rpData  ,
+        float *      const rpResult,
+        unsigned int const nCols   ,
+        unsigned int const nRows   ,
+        float        const sigma   ,
+        unsigned int const line
+    )
     {
         const unsigned nElements = nCols * nRows;
         auto maxError = vectorMaxAbsDiff( rpData, rpResult, nElements );
@@ -161,10 +169,10 @@ namespace algorithms
      **/
     void TestGaussian::checkGaussian
     (
-        float const * const rpResult,
+        float const * const rpResult  ,
         float const * const rpOriginal,
-        unsigned int const rnElements,
-        unsigned int const rnStride
+        unsigned int  const rnElements,
+        unsigned int  const rnStride
     )
     {
         assert( vectorMin( rpOriginal, rnElements, rnStride )
@@ -180,10 +188,10 @@ namespace algorithms
      **/
     void TestGaussian::checkGaussianHorizontal
     (
-        float const * const rpResult,
+        float const * const rpResult  ,
         float const * const rpOriginal,
-        unsigned const rnCols,
-        unsigned const rnRows
+        unsigned int  const rnCols    ,
+        unsigned int  const rnRows
     )
     {
         for ( unsigned iRow = 0; iRow < rnRows; ++iRow )
@@ -195,10 +203,10 @@ namespace algorithms
      **/
     void TestGaussian::checkGaussianVertical
     (
-        float const * const rpResult,
+        float const * const rpResult  ,
         float const * const rpOriginal,
-        unsigned int const rnCols,
-        unsigned int const rnRows
+        unsigned int  const rnCols    ,
+        unsigned int  const rnRows
     )
     {
         for ( unsigned iCol = 0; iCol < rnCols; ++iCol )
@@ -208,8 +216,8 @@ namespace algorithms
     void TestGaussian::checkIfElementsEqual
     (
         float const * const rpData,
-        unsigned int const rnData,
-        unsigned int const rnStride
+        unsigned int  const rnData,
+        unsigned int  const rnStride
     )
     {
         assert( rnStride > 0 );
@@ -235,14 +243,14 @@ namespace algorithms
 
     void TestGaussian::fillWithRandomValues
     (
-        float * const rdpData,
-        float * const rpData,
+        float *      const rdpData,
+        float *      const rpData ,
         unsigned int const rnElements
     )
     {
         for ( unsigned i = 0; i < rnElements; ++i )
             rpData[i] = (float) rand() / RAND_MAX - 0.5;
-        if ( dpData != NULL )
+        if ( rdpData != NULL )
             CUDA_ERROR( cudaMemcpy( rdpData, rpData, rnElements*sizeof( rdpData[0] ), cudaMemcpyHostToDevice ) );
     }
 
