@@ -38,6 +38,8 @@ namespace algorithms
         static constexpr unsigned int nMaxElements = 4*1024*1024;
         static constexpr int maxKernelWidth = 30; // (sigma=4), needed to calculate upper bound of maximum rounding error
 
+        TestGaussian();
+        ~TestGaussian();
 
         static void compareFloatArray
         (
@@ -145,7 +147,6 @@ namespace algorithms
         void testGaussianConstantValuesPerRowLine( void );
         void testGaussianConstantValues          ( void );
         void benchmarkGaussianGeneralRandomValues( void );
-        void benchmarkFourierConvolution         ( void );
         /* calls all tests */
         void operator()( void );
 

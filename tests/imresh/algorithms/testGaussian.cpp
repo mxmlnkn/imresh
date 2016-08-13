@@ -45,6 +45,7 @@
 #include "libs/cudacommon.hpp"
 #include "benchmarkHelper.hpp"
 
+
 #define DEBUG_TESTGAUSSIAN 2
 
 
@@ -194,7 +195,7 @@ namespace algorithms
         unsigned int  const rnRows
     )
     {
-        for ( unsigned iRow = 0; iRow < rnRows; ++iRow )
+        for ( auto iRow = 0u; iRow < rnRows; ++iRow )
             checkGaussian( rpResult, rpOriginal, rnCols );
     }
 
@@ -754,8 +755,7 @@ namespace algorithms
         }
     }
 
-
-    void TestGaussian::operator()( void )
+    TestGaussian::TestGaussian()
     {
         using namespace imresh::algorithms::cuda;
         using namespace imresh::libs;
@@ -769,19 +769,24 @@ namespace algorithms
         /* fill test data with random numbers from [-0.5,0.5] */
         srand(350471643);
         fillWithRandomValues( dpData, pData, nMaxElements );
+    }
 
-
-        testGaussianDiracDeltas();
-        testGaussianRandomSingleData();
-        testGaussianConstantValuesPerRowLine();
-        testGaussianConstantValues();
-        benchmarkGaussianGeneralRandomValues();
-
+    TestGaussian::~TestGaussian()
+    {
         delete[] pResultCpu;
         delete[] pSolution;
         CUDA_ERROR( cudaFree( dpData ) );
         CUDA_ERROR( cudaFreeHost( pData ) );
         CUDA_ERROR( cudaFreeHost( pResult ) );
+    }
+
+    void TestGaussian::operator()( void )
+    {
+        testGaussianDiracDeltas();
+        testGaussianRandomSingleData();
+        testGaussianConstantValuesPerRowLine();
+        testGaussianConstantValues();
+        benchmarkGaussianGeneralRandomValues();
     }
 
 
