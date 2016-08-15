@@ -750,16 +750,16 @@ namespace cuda
          * Every block works on 1 image line. The number of Threads is limited
          * by the hardware to be e.g. 512 or 1024. The reason for this is the
          * limited shared memory size! */
-        const unsigned nThreads = 256;
-        const unsigned nBlocks  = rnDataY;
+        CudaKernelConfig const rKernelConfig;
+        auto const nThreads = rKernelConfig.nThreads.x;
+        auto const nBlocks  = rnDataY;  // must be rnDataY or else the kernel won't work
         const unsigned N = (kernelSize-1)/2;
         const unsigned bufferSize = nThreads + 2*N;
 
-        CUPLA_KERNEL( cudaKernelApplyKernelSharedWeights<T_PREC> )(
-            nBlocks,nThreads,
-            sizeof(T_PREC)*( kernelSize + bufferSize ),
-            rStream
-        )( rdpData, rnDataX, dpKernel, N );
+        CUPLA_KERNEL
+            ( cudaKernelApplyKernelSharedWeights<T_PREC> )
+            ( nBlocks, nThreads, sizeof(T_PREC)*( kernelSize + bufferSize ), rStream )
+            ( rdpData, rnDataX, dpKernel, N );
         CUDA_ERROR( cudaPeekAtLastError() );
 
         if ( not rAsync )
@@ -1069,10 +1069,10 @@ namespace cuda
          *  - nThreadsX should be a multiple of a cache line / superword =
          *    32 warps * 1 float per warp = 128 Byte => nThreadsX = 32.
          *    For double 16 would also suffice.
-         **/
-        dim3 nThreads( 32, 1024/32, 1 );
-        dim3 nBlocks ( 1, 1, 1 );
-        nBlocks.x = (unsigned) ceilf( (float) rnDataX / nThreads.x );
+         */
+        CudaKernelConfig const rKernelConfig;
+        auto const nThreads = dim3( 1, rKernelConfig.nThreads.x, 1 );
+        auto const nBlocks  = (unsigned) ceilf( (float) rnDataX / nThreads.x );
         const unsigned kernelHalfSize = (kernelSize-1)/2;
         const unsigned bufferSize     = nThreads.x*( nThreads.y + 2*kernelHalfSize );
 
